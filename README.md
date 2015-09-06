@@ -1,4 +1,4 @@
-# Slim Redis cache
+# Slim Access
 
 Access control middleware for Slim framework.
 
