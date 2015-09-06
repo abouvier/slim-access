@@ -1,0 +1,23 @@
+{
+	"name": "abouvier/slim-access",
+	"type": "library",
+	"description": "Access control middleware for Slim framework",
+	"keywords": ["slim", "middleware", "access", "control", "filter"],
+	"homepage": "https://github.com/abouvier/slim-redis-cache",
+	"license": "Apache-2.0",
+	"authors": [
+		{
+			"name": "abouvier",
+			"email": "abouvier@student.42.fr"
+		}
+	],
+	"require": {
+		"php": ">=5.5.0",
+		"slim/slim": "~2.6"
+	},
+	"autoload": {
+		"psr-4": {
+			"Slim\\Middleware\\": "src/"
+		}
+	}
+}
