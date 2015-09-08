@@ -52,11 +52,12 @@ class Access extends \Slim\Middleware
 
 	public static function cidr_match($cidr, $address)
 	{
-		list(
-			$subnet,
-			$slash,
-			$size
-		) = preg_split(	'@(/|$)@', $cidr, 2, PREG_SPLIT_DELIM_CAPTURE);
+		list($subnet, $slash, $size) = preg_split(
+			'@(/|$)@',
+			$cidr,
+			2,
+			PREG_SPLIT_DELIM_CAPTURE
+		);
 		if (filter_var($subnet, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4))
 		{
 			$size = 32 - intval($slash ? $size : 32);
@@ -65,7 +66,14 @@ class Access extends \Slim\Middleware
 		elseif (filter_var($subnet, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6))
 		{
 			$size = intval($slash ? $size : 128);
-			return inet_pton($subnet) == (inet_pton($address) & pack('H*', str_pad(str_repeat('f', $size / 4) . ['', '8', 'c', 'e'][$size % 4], 32, '0')));
+			return inet_pton($subnet) == (inet_pton($address) & pack(
+				'H*',
+				str_pad(
+					str_repeat('f', $size / 4) . ['', '8', 'c', 'e'][$size % 4],
+					32,
+					'0'
+				)
+			));
 		}
 		return false;
 	}
