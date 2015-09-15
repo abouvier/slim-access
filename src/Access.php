@@ -34,6 +34,18 @@ class Access extends \Slim\Middleware
 		$this->settings = $settings + $defaults;
 	}
 
+	public function allow($cidr)
+	{
+		$this->settings['list'][$cidr] = self::ALLOW;
+		return $this;
+	}
+
+	public function deny($cidr)
+	{
+		$this->settings['list'][$cidr] = self::DENY;
+		return $this;
+	}
+
 	public function call()
 	{
 		foreach ($this->settings['list'] as $cidr => $allow) {
