@@ -20,8 +20,8 @@ namespace Slim\Middleware;
 
 class Access extends \Slim\Middleware
 {
-	const DENY  = 0;
-	const ALLOW = 1;
+	const ALLOW = true;
+	const DENY = false;
 
 	protected $addresses;
 	protected $callback;
