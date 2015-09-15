@@ -14,7 +14,7 @@ Access control middleware for Slim framework.
 
 ## Usage
 
-Only accept requests from localhost and the 192.168.1.0/24 subnet (except for 192.168.1.42).
+Only accept requests from localhost and the 192.168.1.0/24 subnet (except for 192.168.1.42):
 
 ```php
 use \Slim\Middleware\Access;
@@ -22,14 +22,33 @@ use \Slim\Middleware\Access;
 $app = new \Slim\Slim();
 // ...
 $app->add(new Access([
-	'::1' => Access::ALLOW,
-	'127.0.0.1' => Access::ALLOW,
-	'192.168.1.42' => Access::DENY,
-	'192.168.1.0/24' => Access::ALLOW,
-	'all' => Access::DENY
-], function () use ($app) {
-	$app->halt(403, 'You Shall Not Pass!!!');
-}));
+	'callback' => function () use ($app) {
+		$app->halt(403, 'You Shall Not Pass!!!');
+	},
+	'list' => [
+		'::1' => Access::ALLOW,
+		'127.0.0.1' => Access::ALLOW,
+		'192.168.1.42' => Access::DENY,
+		'192.168.1.0/24' => Access::ALLOW,
+		'all' => Access::DENY // optional as "all" is already denied by default
+	]
+]));
+// ...
+$app->run();
+```
+
+or:
+
+```php
+$app = new \Slim\Slim();
+// ...
+$access = new \Slim\Middleware\Access([
+	'callback' => function () use ($app) {
+		$app->halt(403, 'You Shall Not Pass!!!');
+	}
+]);
+$access->allow(::1)->allow('127.0.0.1')->deny('192.168.1.42')->allow('192.168.1.0/24')->deny('all');
+$app->add($access);
 // ...
 $app->run();
 ```
