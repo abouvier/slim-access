@@ -48,8 +48,11 @@ class Access extends \Slim\Middleware
 				return;
 			}
 		}
-		if (is_callable($this->settings['callback']))
+		if (is_callable($this->settings['callback'])) {
 			$this->settings['callback']();
+			return;
+		}
+		$this->app->response->setStatus(403);
 	}
 
 	public static function cidrMatch($cidr, $address)
