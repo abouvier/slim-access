@@ -23,21 +23,23 @@ class Access extends \Slim\Middleware
 	const ALLOW = true;
 	const DENY = false;
 
-	protected $addresses;
-	protected $callback;
+	protected $settings;
 
-	public function __construct(array $addresses, $callback = null)
+	public function __construct(array $settings = [])
 	{
-		$this->addresses = $addresses;
-		$this->callback = $callback;
+		$defaults = [
+			'callback' => null,
+			'list' => [],
+		];
+		$this->settings = $settings + $defaults;
 	}
 
 	public function call()
 	{
-		foreach ($this->addresses as $address => $allow) {
-			$address = strtolower(trim($address));
-			if ($address == 'all' or self::cidr_match(
-				$address,
+		foreach ($this->settings['list'] as $cidr => $allow) {
+			$cidr = strtolower(trim($cidr));
+			if ($cidr == 'all' or self::cidrMatch(
+				$cidr,
 				$this->app->environment['REMOTE_ADDR']
 			)) {
 				if (!$allow)
@@ -46,8 +48,8 @@ class Access extends \Slim\Middleware
 				return;
 			}
 		}
-		if (is_callable($this->callback))
-			call_user_func($this->callback);
+		if (is_callable($this->settings['callback']))
+			$this->settings['callback']();
 	}
 
 	public static function cidrMatch($cidr, $address)
