@@ -47,7 +47,7 @@ $access = new \Slim\Middleware\Access([
 		$app->halt(403, 'You Shall Not Pass!!!');
 	}
 ]);
-$access->allow(::1)->allow('127.0.0.1')->deny('192.168.1.42')->allow('192.168.1.0/24')->deny('all');
+$access->allow('::1')->allow('127.0.0.1')->deny('192.168.1.42')->allow('192.168.1.0/24')->deny('all');
 $app->add($access);
 // ...
 $app->run();
